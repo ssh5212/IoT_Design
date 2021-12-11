@@ -4,10 +4,20 @@
 #include <winsock2.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #define SERVERIP   "127.0.0.1"
 #define SERVERPORT 9999
 #define BUFSIZE    512
+
+int get_retrench(int val1, int val2, int val3, int second){
+
+    float hour = second / 3600;
+    float watt = (val1+val2+val3) * 220;
+    float result = watt * hour;
+
+    return (int)result;
+}
 
 // ���� �Լ� ���� ��� �� ����
 void err_quit(char* msg)
@@ -91,6 +101,11 @@ int main(int argc, char* argv[])
             inet_ntoa(serveraddr.sin_addr), ntohs(serveraddr.sin_port));
 
         // Ŭ���̾�Ʈ�� ������ ���
+
+        int elec_val1;
+        int elec_val2;
+        int elec_val3;
+
         while (1) {
             // ������ �ޱ�
             retval = recv(sock, buf, BUFSIZE, 0);
@@ -115,6 +130,30 @@ int main(int argc, char* argv[])
             fputs("\n", fp);
 
             fclose(fp);                             // ���� ������ �ݱ�
+
+            char *status;
+            char *value;
+
+            strtok(buf, " ");
+            status = strtok(NULL, " ");
+
+            if(strcmp(status, "OFF") == 0){
+                elec_val1 = strtok(NULL, " ");
+                elec_val2 = strtok(NULL, " ");
+                elec_val3 = strtok(NULL, " ");
+
+            }
+            else if (strcmp(status, "ON") == 0){
+                int second = strtok(NULL, " ");
+
+                retrench = get_retrench();
+
+                FILE *fp = fopen("retrench.txt", "w");
+
+                fputs(retrench, fp);
+            }
+
+
         }
 
         // closesocket()
