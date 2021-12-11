@@ -1,3 +1,3 @@
 @echo off
-cd C:\IoT_Design\PC2
+cd C:\VS\.vs\server\server
 python send_bot.py
