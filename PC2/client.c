@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
             else if (strcmp(status, "ON") == 0){
                 int second = strtok(NULL, " ");
 
-                retrench = get_retrench();
+                int retrench = get_retrench(elec_val1, elec_val2, elec_val3, second);
 
                 FILE *fp = fopen("retrench.txt", "w");
 
