@@ -1,5 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
-#define _WINSOCK_DEPRECATED_NO_WARNINGS // ÃÖ½Å VC++ ÄÄÆÄÀÏ ½Ã °æ°í ¹æÁö
+#define _WINSOCK_DEPRECATED_NO_WARNINGS // ï¿½Ö½ï¿½ VC++ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 #pragma comment(lib, "ws2_32")
 #include <winsock2.h>
 #include <stdlib.h>
@@ -9,7 +9,7 @@
 #define SERVERPORT 9999
 #define BUFSIZE    512
 
-// ¼ÒÄÏ ÇÔ¼ö ¿À·ù Ãâ·Â ÈÄ Á¾·á
+// ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 void err_quit(char* msg)
 {
     LPVOID lpMsgBuf;
@@ -23,7 +23,7 @@ void err_quit(char* msg)
     exit(1);
 }
 
-// ¼ÒÄÏ ÇÔ¼ö ¿À·ù Ãâ·Â
+// ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 void err_display(char* msg)
 {
     LPVOID lpMsgBuf;
@@ -36,7 +36,7 @@ void err_display(char* msg)
     LocalFree(lpMsgBuf);
 }
 
-// »ç¿ëÀÚ Á¤ÀÇ µ¥ÀÌÅÍ ¼ö½Å ÇÔ¼ö
+// ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 int recvn(SOCKET s, char* buf, int len, int flags)
 {
     int received;
@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
 
     int retval;
 
-    // À©¼Ó ÃÊ±âÈ­
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
     WSADATA wsa;
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
         return 1;
@@ -79,20 +79,20 @@ int main(int argc, char* argv[])
     retval = connect(sock, (SOCKADDR*)&serveraddr, sizeof(serveraddr));
     if (retval == SOCKET_ERROR) err_quit("connect()");
 
-    // µ¥ÀÌÅÍ Åë½Å¿¡ »ç¿ëÇÒ º¯¼ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     char buf[BUFSIZE + 1];
 
-    // ¼­¹ö¿Í µ¥ÀÌÅÍ Åë½Å
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     while (1) {
 
 
-        // Á¢¼ÓÇÑ Å¬¶óÀÌ¾ðÆ® Á¤º¸ Ãâ·Â
-        printf("\n[TCP ¼­¹ö] Å¬¶óÀÌ¾ðÆ® Á¢¼Ó: IP ÁÖ¼Ò=%s, Æ÷Æ® ¹øÈ£=%d\n",
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+        printf("\n[TCP ï¿½ï¿½ï¿½ï¿½] Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® ï¿½ï¿½ï¿½ï¿½: IP ï¿½Ö¼ï¿½=%s, ï¿½ï¿½Æ® ï¿½ï¿½È£=%d\n",
             inet_ntoa(serveraddr.sin_addr), ntohs(serveraddr.sin_port));
 
-        // Å¬¶óÀÌ¾ðÆ®¿Í µ¥ÀÌÅÍ Åë½Å
+        // Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         while (1) {
-            // µ¥ÀÌÅÍ ¹Þ±â
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ±ï¿½
             retval = recv(sock, buf, BUFSIZE, 0);
             if (retval == SOCKET_ERROR) {
                 err_display("recv()");
@@ -102,30 +102,31 @@ int main(int argc, char* argv[])
                 break;
 
 
-            // ¹ÞÀº µ¥ÀÌÅÍ Ãâ·Â
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             buf[retval] = '\0';
             printf("[TCP/%s:%d] %s\n", inet_ntoa(serveraddr.sin_addr),
                 ntohs(serveraddr.sin_port), buf);
 
 
-            FILE* fp = fopen("result.txt", "a");    // result.txt ÆÄÀÏÀ» Ãß°¡ ¸ðµå(a)·Î ¿­±â. (!¹Ì¸® »ý¼ºÇØµÎ±â!)
-                                                    // ÆÄÀÏ Æ÷ÀÎÅÍ¸¦ ¹ÝÈ¯
+            FILE* fp = fopen("result.txt", "a");    // result.txt ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½ï¿½ï¿½(a)ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. (!ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ØµÎ±ï¿½!)
+                                                    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½È¯
 
-            fputs(buf, fp);                         // ÆÄÀÏ¿¡ ¹®ÀÚ¿­ ÀúÀå
+            fputs(buf, fp);                         // ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½
+            fputs("\n", fp);
 
-            fclose(fp);                             // ÆÄÀÏ Æ÷ÀÎÅÍ ´Ý±â
+            fclose(fp);                             // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ý±ï¿½
         }
 
         // closesocket()
         closesocket(sock);
-        printf("[TCP ¼­¹ö] Å¬¶óÀÌ¾ðÆ® Á¾·á: IP ÁÖ¼Ò=%s, Æ÷Æ® ¹øÈ£=%d\n",
+        printf("[TCP ï¿½ï¿½ï¿½ï¿½] Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® ï¿½ï¿½ï¿½ï¿½: IP ï¿½Ö¼ï¿½=%s, ï¿½ï¿½Æ® ï¿½ï¿½È£=%d\n",
             inet_ntoa(serveraddr.sin_addr), ntohs(serveraddr.sin_port));
     }
 
     // closesocket()
     closesocket(sock);
 
-    // À©¼Ó Á¾·á
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     WSACleanup();
     return 0;
