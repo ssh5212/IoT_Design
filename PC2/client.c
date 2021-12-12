@@ -1,25 +1,37 @@
 #define _CRT_SECURE_NO_WARNINGS
-#define _WINSOCK_DEPRECATED_NO_WARNINGS // ï¿½Ö½ï¿½ VC++ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+#define _WINSOCK_DEPRECATED_NO_WARNINGS //ÃÖ½Å VC++ ÄÄÆÄÀÏ ½Ã °æ°í ¹æÁö               
 #pragma comment(lib, "ws2_32")
 #include <winsock2.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <process.h>
 
-#define SERVERIP   "127.0.0.1"
+
+
+#define SERVERIP   "192.168.36.165"
 #define SERVERPORT 9999
 #define BUFSIZE    512
 
-int get_retrench(int val1, int val2, int val3, int second){
+int get_retrench(int val1, int val2, int val3, int second) {
 
     float hour = second / 3600;
-    float watt = (val1+val2+val3) * 220;
+    printf("h: %d\n", hour);
+    printf("h: %s\n", hour);
+    float watt = (val1 + val2 + val3) * 220;
+    printf("va1: %f\n", val1);
+    printf("va2: %f\n", val2);
+    printf("w: %d\n", watt);
+    printf("w: %s\n", watt);
     float result = watt * hour;
+    printf("fl_result: %f", result);
+    printf("in_result: %d", result);
+
 
     return (int)result;
 }
 
-// ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//  ¼ÒÄÏ ÇÔ¼ö ¿À·ù Ãâ·Â ÈÄ Á¾·á
 void err_quit(char* msg)
 {
     LPVOID lpMsgBuf;
@@ -33,7 +45,7 @@ void err_quit(char* msg)
     exit(1);
 }
 
-// ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+//  ¼ÒÄÏ ÇÔ¼ö ¿À·ù Ãâ·Â
 void err_display(char* msg)
 {
     LPVOID lpMsgBuf;
@@ -46,7 +58,7 @@ void err_display(char* msg)
     LocalFree(lpMsgBuf);
 }
 
-// ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+// »ç¿ëÀÚ Á¤ÀÇ µ¥ÀÌÅÍ ¼ö½Å ÇÔ¼ö
 int recvn(SOCKET s, char* buf, int len, int flags)
 {
     int received;
@@ -71,12 +83,12 @@ int main(int argc, char* argv[])
 
     int retval;
 
-    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
+    // ¿ø¼Ó ÃÊ±âÈ­
     WSADATA wsa;
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
         return 1;
 
-    // socket()
+    // ¼­¹ö¿Í µ¥ÀÌÅÍ Åë½Å
     SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock == INVALID_SOCKET) err_quit("socket()");
 
@@ -89,25 +101,30 @@ int main(int argc, char* argv[])
     retval = connect(sock, (SOCKADDR*)&serveraddr, sizeof(serveraddr));
     if (retval == SOCKET_ERROR) err_quit("connect()");
 
-    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // µ¥ÀÌÅÍ Åë½Å¿¡ »ç¿ëÇÒ º¯¼ö
     char buf[BUFSIZE + 1];
 
-    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+    // ¼­¹ö¿Í µ¥ÀÌÅÍ Åë½Å
     while (1) {
 
 
-        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
-        printf("\n[TCP ï¿½ï¿½ï¿½ï¿½] Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® ï¿½ï¿½ï¿½ï¿½: IP ï¿½Ö¼ï¿½=%s, ï¿½ï¿½Æ® ï¿½ï¿½È£=%d\n",
+        // Á¢¼ÓÇÑ Å¬¶óÀÌ¾ðÆ® Á¤º¸ Ãâ·Â
+        printf("\n[TCP ¼­¹ö] Å¬¶óÀÌ¾ðÆ® Á¢¼Ó: IP ÁÖ¼Ò=%s, Æ÷Æ® ¹øÈ£=%d\n",
             inet_ntoa(serveraddr.sin_addr), ntohs(serveraddr.sin_port));
 
-        // Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+        // Å¬¶óÀÌ¾ðÆ®¿Í µ¥ÀÌÅÍ Åë½Å
 
-        int elec_val1;
-        int elec_val2;
-        int elec_val3;
+        char elec_val1[20] = "";
+        char elec_val2[20] = "";
+        char elec_val3[20] = "";
+
+        char* elec_val1_;
+        char* elec_val2_;
+        char* elec_val3_;
+
 
         while (1) {
-            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ±ï¿½
+            // µ¥ÀÌÅÍ ¹Þ±â
             retval = recv(sock, buf, BUFSIZE, 0);
             if (retval == SOCKET_ERROR) {
                 err_display("recv()");
@@ -117,55 +134,96 @@ int main(int argc, char* argv[])
                 break;
 
 
-            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+            // ¹ÞÀº µ¥ÀÌÅÍ Ãâ·Â
             buf[retval] = '\0';
             printf("[TCP/%s:%d] %s\n", inet_ntoa(serveraddr.sin_addr),
                 ntohs(serveraddr.sin_port), buf);
 
 
-            FILE* fp = fopen("result.txt", "a");    // result.txt ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½ï¿½ï¿½(a)ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. (!ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ØµÎ±ï¿½!)
-                                                    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½È¯
+            FILE* fp = fopen("result.txt", "a");    // result.txt ÆÄÀÏÀ» Ãß°¡ ¸ðµå (a)·Î ¿­±â. (!¹Ì¸® »ý¼ºÇØµÎ±â)
+                                                    // ÆÄÀÏ Æ÷ÀÎÅÍ¸¦ ¹ÝÈ¯
 
-            fputs(buf, fp);                         // ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½
+            fputs(buf, fp);                         // ÆÄÀÏ¿¡ ¹®ÀÚ¿­ ÀúÀå
             fputs("\n", fp);
 
-            fclose(fp);                             // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ý±ï¿½
+            fclose(fp);                             // ÆÄÀÏ Æ÷ÀÎÅÍ ´Ý±â
 
-            char *status;
-            char *value;
+            char* status;
+            char* value;
 
             strtok(buf, " ");
             status = strtok(NULL, " ");
 
-            if(strcmp(status, "OFF") == 0){
-                elec_val1 = strtok(NULL, " ");
-                elec_val2 = strtok(NULL, " ");
-                elec_val3 = strtok(NULL, " ");
+            if (strcmp(status, "OFF") == 0) {
+                elec_val1_ = strtok(NULL, " ");
+                elec_val2_ = strtok(NULL, " ");
+                elec_val3_ = strtok(NULL, " ");
 
+                strcpy(elec_val1, elec_val1_);
+                strcpy(elec_val2, elec_val2_);
+                strcpy(elec_val3, elec_val3_);
             }
-            else if (strcmp(status, "ON") == 0){
-                int second = strtok(NULL, " ");
+            else if (strcmp(status, "ON") == 0) {
+                char* second = strtok(NULL, " ");
+                //num1 = atoi(s1);
+                if (second == -1) {
+                    continue;
+                }
 
-                int retrench = get_retrench(elec_val1, elec_val2, elec_val3, second);
+                //printf("__sec: %s\n", second);
 
-                FILE *fp = fopen("retrench.txt", "w");
 
-                fputs(retrench, fp);
+                printf("atoi_elva1: %f\n", atof(elec_val1));
+                printf("atoi_elva2: %f\n", atof(elec_val2));
+                printf("atoi_elva3: %f\n", atof(elec_val3));
+                printf("atof_sec: %f\n", atof(second));
+                float atoi_val1 = atof(elec_val1);
+                float atoi_val2 = atof(elec_val2);
+                float atoi_val3 = atof(elec_val3);
+                float atoi_sec = atof(second);
+                int atod_sec = atoi(second);
+                //printf("%d\n", atod_sec);
+                //printf("%d, %d, %d, %d\n", atoi_val1, atoi_val2, atoi_val3, atoi_sec);
+                //int retrench = get_retrench(atoi(elec_val1), atoi(elec_val2), atoi(elec_val3), atoi(second));
+                float w_hour = atoi_sec / 3600;
+                float w_watt = (atoi_val1 + atoi_val2 + atoi_val3) * 220;
+                float w_result = w_watt * w_hour;
+                printf("hour: %f\n", w_hour);
+                printf("w_result: %f\n", w_result);
+
+
+                //int retrench = get_retrench(atoi_val1, atoi_val2, atoi_val3, atoi_sec);
+
+
+
+                //printf("retrench: %d\n", retrench);
+                //printf("%d\n", get_retrench);
+                char retrench_[20];
+                sprintf(retrench_, "%f", w_result);
+                //printf("ret1: %d\n", retrench);
+                //printf("ret_2: %s\n", retrench_);
+                FILE* f = fopen("retrench.txt", "w");
+
+                fputs(retrench_, f);
+                fclose(f);
+
+                system("C:/VS/.vs/server/server/send_bot.cmd");
+
             }
 
 
         }
 
-        // closesocket()
+        // closesocket()    
         closesocket(sock);
-        printf("[TCP ï¿½ï¿½ï¿½ï¿½] Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® ï¿½ï¿½ï¿½ï¿½: IP ï¿½Ö¼ï¿½=%s, ï¿½ï¿½Æ® ï¿½ï¿½È£=%d\n",
+        printf("[TCP ¼­¹ö] Å¬¶óÀÌ¾ðÆ® Á¾·á: IP ÁÖ¼Ò=%s, Æ÷Æ® ¹øÈ£=%d\n",
             inet_ntoa(serveraddr.sin_addr), ntohs(serveraddr.sin_port));
     }
 
     // closesocket()
     closesocket(sock);
 
-    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    //          
 
     WSACleanup();
     return 0;
