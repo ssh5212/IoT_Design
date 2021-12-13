@@ -35,4 +35,4 @@
 - ACS712 (전류센서)
 
 ## 완성본
-
+- Youtube Link : https://www.youtube.com/watch?v=4os0Cn02STQ
